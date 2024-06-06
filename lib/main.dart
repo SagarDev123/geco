@@ -7,7 +7,8 @@ import 'package:geco/repository/login_repository.dart';
 void main() {
   runApp(MultiBlocProvider(providers: [
     BlocProvider<LoginBlocBloc>(
-      create: (BuildContext context) => LoginBlocBloc(),
+      create: (BuildContext context) =>
+          LoginBlocBloc(loginRepository: LoginRepository()),
     ),
   ], child: MyApp()));
 }

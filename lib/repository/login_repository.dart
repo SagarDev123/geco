@@ -7,14 +7,21 @@ class LoginRepository {
   RemoteDataRepository remoteDataRepository = RemoteDataRepository();
 
   Future<dynamic> loginUser(username, password) async {
-    var apiQuerymap = Map<String, dynamic>();
-    apiQuerymap.putIfAbsent("phone", () => username);
-    apiQuerymap.putIfAbsent("time", () => password);
+    var requestBody = {
+      "username": username,
+      "password": password,
+      "device_id": "5645gfhfdfs"
+    };
+    // var apiQuerymap = Map<String, dynamic>();
+    // apiQuerymap.putIfAbsent("username", () => username);
+    // apiQuerymap.putIfAbsent("password", () => password);
+    // apiQuerymap.putIfAbsent("device_id", () => '5645gfhfdfs');
     Map<String, dynamic> response =
         await remoteDataRepository.requestRemotePost(
       endpoint: Config.login,
-      param: apiQuerymap,
+      body: requestBody,
     );
+
     User resp = User.fromJson(response);
     return resp;
   }

@@ -4,22 +4,35 @@ import '../data/remote/api_config.dart';
 import '../data/remote/exceptions.dart';
 
 class RemoteDataRepository {
-  Future<dynamic> requestRemotePost(
-      {required String endpoint, dynamic param, dynamic apiQuerymap}) async {
-    final urlEndpoint = '${Config.baseUrl}$endpoint';
-    Uri uri = Uri.parse(urlEndpoint);
-    var header = <String, String>{
-      'Content-Type': Config.contentType,
-      'User-Agent': 'Mobile'
+  Future<dynamic> requestRemotePost({
+    required String endpoint,
+    Map<String, dynamic>? body,
+  }) async {
+    // Construct the base URL
+    Uri uri = Uri.parse('${Config.baseUrl}$endpoint');
+
+    // Set up headers for a JSON content type
+    Map<String, String> headers = {
+      "Content-type": "application/x-www-form-urlencoded"
     };
-    if (apiQuerymap != null) {
-      uri = Uri.parse(urlEndpoint);
-      uri = uri.replace(queryParameters: apiQuerymap);
-    } else {
-      uri = Uri.parse(urlEndpoint);
+
+    // Make the HTTP POST request
+    http.Response response;
+    try {
+      response = await http.post(uri,
+          headers: headers, body: body // Encode the body map as a JSON string
+          );
+
+      // Debugging: Print only status code and body for security reasons
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+    } catch (e) {
+      // Handle any errors that occur during the POST request
+      print('Error during HTTP POST: $e');
+      throw Exception('Failed to post data to $endpoint');
     }
-    final http.Response response =
-        await http.post(uri, headers: header, body: jsonEncode(param));
+
+    // Process the response (assuming processResponse is a function that handles the response)
     return processResponse(response);
   }
 }

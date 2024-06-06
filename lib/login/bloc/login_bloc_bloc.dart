@@ -14,9 +14,7 @@ part 'login_bloc_state.dart';
 class LoginBlocBloc extends Bloc<LoginBlocEvent, LoginBlocState> {
   LoginRepository loginRepository;
   LoginBlocBloc({required this.loginRepository}) : super(LoginBlocInitial()) {
-    on<LoginBlocEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<LoginBlocEvent>((event, emit) {});
     on<OnUsernameChange>(
       (event, emit) {
         emit(LoginCredentialValidationState(isValid: true, message: ""));

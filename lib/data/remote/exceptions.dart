@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class ApiErrorException implements Exception {
   String? message = '';
   int statusCode = 200;
