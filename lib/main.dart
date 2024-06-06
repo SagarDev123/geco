@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geco/login/bloc/login_bloc_bloc.dart';
 import 'package:geco/login/loginscreen.dart';
+import 'package:geco/repository/login_repository.dart';
 
 void main() {
   runApp(MultiBlocProvider(providers: [
@@ -25,7 +26,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const LoginScreen(),
+        '/': (context) => BlocProvider(
+            create: (context) =>
+                LoginBlocBloc(loginRepository: LoginRepository()),
+            child: const LoginScreen()),
+
         // '/login': (context) => BlocProvider(
         //     create: (context) => LoginBloc(repository: UserRepository()),
         //     child: const Login()),
