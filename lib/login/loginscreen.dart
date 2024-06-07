@@ -44,6 +44,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 backgroundColor: Colors.red,
                 textColor: Colors.white,
                 fontSize: 16.0);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              "/dashboard",
+              (Route<dynamic> route) => false,
+            );
           }
         },
         child: loginStack(),

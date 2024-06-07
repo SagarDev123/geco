@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:geco/data/model/user.dart';
 import 'package:geco/repository/login_repository.dart';
+import 'package:geco/utils/sharedpreferencehelper.dart';
 import 'package:meta/meta.dart';
 
 import '../../data/remote/exceptions.dart';
@@ -33,6 +34,7 @@ class LoginBlocBloc extends Bloc<LoginBlocEvent, LoginBlocState> {
               await loginRepository.loginUser(event.username, event.password);
           if (user.status != null && user.status == true) {
             emit(LoginSuccessState(message: Constants.loginSuccessMessage));
+            SharedPreferenceHelper.saveContent(user);
           } else {
             emit(LoginApiFailure(error: user.message!));
           }

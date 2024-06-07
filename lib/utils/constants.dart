@@ -6,6 +6,9 @@ class Constants {
   static const String password = 'Password';
   static const String loginNow = 'Login Now';
   static const String loginSuccessMessage = 'User login successfully';
-
   static const String NO_CONNECTION = 'No internet connection';
+  static const String appName = 'Your Retail Management App';
+
+  static const String customerList = 'Customers List';
+  static const String previousOrderList = 'Previous Order List';
 }

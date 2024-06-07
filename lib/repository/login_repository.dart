@@ -12,10 +12,6 @@ class LoginRepository {
       "password": password,
       "device_id": "5645gfhfdfs"
     };
-    // var apiQuerymap = Map<String, dynamic>();
-    // apiQuerymap.putIfAbsent("username", () => username);
-    // apiQuerymap.putIfAbsent("password", () => password);
-    // apiQuerymap.putIfAbsent("device_id", () => '5645gfhfdfs');
     Map<String, dynamic> response =
         await remoteDataRepository.requestRemotePost(
       endpoint: Config.login,

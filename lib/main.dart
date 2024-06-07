@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geco/login/bloc/login_bloc_bloc.dart';
 import 'package:geco/login/loginscreen.dart';
+import 'package:geco/presentation/dashboard/bloc/dashboard_bloc.dart';
+import 'package:geco/presentation/dashboard/dashborad.dart';
 import 'package:geco/repository/login_repository.dart';
 
 void main() {
@@ -31,14 +33,10 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 LoginBlocBloc(loginRepository: LoginRepository()),
             child: const LoginScreen()),
-
-        // '/login': (context) => BlocProvider(
-        //     create: (context) => LoginBloc(repository: UserRepository()),
-        //     child: const Login()),
-        // '/dashboard': (context) => BlocProvider(
-        //       create: (context) => DashboardBloc(),
-        //       child: const DashBoard(),
-        //     ),
+        '/dashboard': (context) => BlocProvider(
+              create: (context) => DashboardBloc(),
+              child: const Dashboard(),
+            ),
         // '/signup': (context) => const SignUp(),
         // '/signupDetails': (context) => const SignUpUserDetails(),
         // '/forgot_password': (context) => BlocProvider(

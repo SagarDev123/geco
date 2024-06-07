@@ -15,17 +15,12 @@ class RemoteDataRepository {
     Map<String, String> headers = {
       "Content-type": "application/x-www-form-urlencoded"
     };
-
     // Make the HTTP POST request
     http.Response response;
     try {
       response = await http.post(uri,
           headers: headers, body: body // Encode the body map as a JSON string
           );
-
-      // Debugging: Print only status code and body for security reasons
-      print('Response Status: ${response.statusCode}');
-      print('Response Body: ${response.body}');
     } catch (e) {
       // Handle any errors that occur during the POST request
       print('Error during HTTP POST: $e');
