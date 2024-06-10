@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geco/login/bloc/login_bloc_bloc.dart';
 import 'package:geco/login/loginscreen.dart';
+import 'package:geco/presentation/createneworder/bloc/create_new_order_bloc.dart';
+import 'package:geco/presentation/createneworder/create_new_order.dart';
+import 'package:geco/presentation/customers/bloc/customer_bloc.dart';
+import 'package:geco/presentation/customers/customers.dart';
 import 'package:geco/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:geco/presentation/dashboard/dashborad.dart';
+import 'package:geco/repository/create_new_order_repository.dart';
+import 'package:geco/repository/customer_repository.dart';
+import 'package:geco/repository/dashboard_repository.dart';
 import 'package:geco/repository/login_repository.dart';
 
 void main() {
@@ -34,8 +41,19 @@ class MyApp extends StatelessWidget {
                 LoginBlocBloc(loginRepository: LoginRepository()),
             child: const LoginScreen()),
         '/dashboard': (context) => BlocProvider(
-              create: (context) => DashboardBloc(),
+              create: (context) =>
+                  DashboardBloc(dashboardRepository: DashboardRepository()),
               child: const Dashboard(),
+            ),
+        '/customer': (context) => BlocProvider(
+              create: (context) =>
+                  CustomerBloc(customerRepository: CustomerRepository()),
+              child: const CustomerList(),
+            ),
+        '/createneworder': (context) => BlocProvider(
+              create: (context) => CreateNewOrderBloc(
+                  createNewOrderRepository: CreateNewOrderRepository()),
+              child: const CreateNewOrder(),
             ),
         // '/signup': (context) => const SignUp(),
         // '/signupDetails': (context) => const SignUpUserDetails(),

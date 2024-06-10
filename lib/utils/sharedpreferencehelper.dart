@@ -20,5 +20,14 @@ class SharedPreferenceHelper {
     return null;
   }
 
-  static getToken() {}
+  static Future<String?> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userData = prefs.getString('userData');
+    if (userData != null) {
+      Map<String, dynamic> json = jsonDecode(userData);
+      User user = User.fromJson(json);
+      return user.data?.utoken; // Safely access `utoken` if `data` is not null
+    }
+    return null;
+  }
 }
