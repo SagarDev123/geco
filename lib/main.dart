@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geco/login/bloc/login_bloc_bloc.dart';
 import 'package:geco/login/loginscreen.dart';
+import 'package:geco/presentation/cart/bloc/view_cart_bloc.dart';
+import 'package:geco/presentation/cart/viewcart.dart';
 import 'package:geco/presentation/createneworder/bloc/create_new_order_bloc.dart';
 import 'package:geco/presentation/createneworder/create_new_order.dart';
 import 'package:geco/presentation/customers/bloc/customer_bloc.dart';
@@ -12,6 +14,7 @@ import 'package:geco/repository/create_new_order_repository.dart';
 import 'package:geco/repository/customer_repository.dart';
 import 'package:geco/repository/dashboard_repository.dart';
 import 'package:geco/repository/login_repository.dart';
+import 'package:geco/repository/viewcart_repository.dart';
 
 void main() {
   runApp(MultiBlocProvider(providers: [
@@ -54,6 +57,11 @@ class MyApp extends StatelessWidget {
               create: (context) => CreateNewOrderBloc(
                   createNewOrderRepository: CreateNewOrderRepository()),
               child: const CreateNewOrder(),
+            ),
+        '/viewcart': (context) => BlocProvider(
+              create: (context) =>
+                  ViewCartBloc(viewCartRepository: ViewCartRepository()),
+              child: const ViewCart(),
             ),
         // '/signup': (context) => const SignUp(),
         // '/signupDetails': (context) => const SignUpUserDetails(),

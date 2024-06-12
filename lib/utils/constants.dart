@@ -27,4 +27,6 @@ class Constants {
 
   static const String customerToDashboard = 'Dashboard/Customers List';
   static const String createNewOrderToDashboard = 'Dashboard/ Create new order';
+
+  static const String cartLists = "Cart Lists";
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class SizeUtils {
-  static double getScreenWidth(BuildContext context, int percent) {
+  static double getScreenWidth(BuildContext context, double percent) {
     return MediaQuery.of(context).size.width * percent / 100;
   }
 
-  static getScreenHeight(BuildContext context, int percent) {
+  static getScreenHeight(BuildContext context, double percent) {
     return MediaQuery.of(context).size.height * percent / 100;
   }
 

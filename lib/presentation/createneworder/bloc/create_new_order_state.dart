@@ -31,3 +31,21 @@ class BrandNameListFetchingCompleted extends CreateNewOrderState {
   final List<String> brandNameList;
   BrandNameListFetchingCompleted({required this.brandNameList});
 }
+
+class ProductTypeListFetchingCompleted extends CreateNewOrderState {
+  final List<ProductTypeDatum> productTypeDatum;
+  ProductTypeListFetchingCompleted({required this.productTypeDatum});
+}
+
+class ProductTypeNameListFetchingCompleted extends CreateNewOrderState {
+  final List<String> productNameList;
+  ProductTypeNameListFetchingCompleted({required this.productNameList});
+}
+
+class ProductListFetched extends CreateNewOrderState {
+  final List<ProductModelData> products;
+
+  ProductListFetched({required this.products});
+}
+
+class AddToCartSuccess extends CreateNewOrderState {}

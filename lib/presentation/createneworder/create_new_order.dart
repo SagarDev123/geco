@@ -1,9 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geco/data/model/brand.dart';
 import 'package:geco/data/model/customer.dart';
+import 'package:geco/data/model/product_model.dart';
+import 'package:geco/data/model/producttype.dart';
 import 'package:geco/presentation/createneworder/bloc/create_new_order_bloc.dart';
+import 'package:geco/presentation/createneworder/list/brand.dart';
 import 'package:geco/presentation/createneworder/list/products.dart';
 import 'package:status_alert/status_alert.dart';
 
@@ -20,17 +23,30 @@ class CreateNewOrder extends StatefulWidget {
 
 class _CreateNewOrderState extends State<CreateNewOrder> {
   String? selectedCustomer;
-
+  String? selectedProductType;
+  TextEditingController searchController = TextEditingController();
   List<Datum> customers = [];
   List<BrandData> brands = [];
   List<String> customerNameList = [];
+  List<String> productTypeNameList = [];
   List<String> brandNameList = [];
+  List<ProductTypeDatum> productTypeList = [];
+  List<ProductModelData> productList = [];
 
+  String searchedBrand = '';
+  String productTypeId = '';
+  String brandId_ = '';
+  String brandName = '';
+
+  bool _isChecked = false;
   @override
   void initState() {
     super.initState();
     context.read<CreateNewOrderBloc>().add(CustomerFetchingEvent());
-    context.read<CreateNewOrderBloc>().add(ShowAllBrandForTheUser());
+    context
+        .read<CreateNewOrderBloc>()
+        .add(ShowAllBrandForTheUser(searchedBrand));
+    context.read<CreateNewOrderBloc>().add(ProductType());
   }
 
   @override
@@ -50,10 +66,25 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
           } else if (state is BrandFetchingCompleted) {
             setState(() {
               brands = state.brand;
+              if (brands.isNotEmpty) {
+                getProductList();
+              }
             });
           } else if (state is BrandNameListFetchingCompleted) {
             setState(() {
               brandNameList = state.brandNameList;
+            });
+          } else if (state is ProductTypeNameListFetchingCompleted) {
+            setState(() {
+              productTypeNameList = state.productNameList;
+            });
+          } else if (state is ProductTypeListFetchingCompleted) {
+            setState(() {
+              productTypeList = state.productTypeDatum;
+            });
+          } else if (state is ProductListFetched) {
+            setState(() {
+              productList = state.products;
             });
           } else if (state is CreateNewOrderFailure) {
             StatusAlert.show(
@@ -67,11 +98,38 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
               configuration: const IconConfiguration(icon: Icons.error),
               maxWidth: 300,
             );
+          } else if (state is AddToCartSuccess) {
+            setState(() {});
+            Fluttertoast.showToast(
+                msg: 'Add to cart was successful',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0);
           }
         },
-        child: createNewOrderBody(context),
+        child: createOrderStack(context),
       ),
     ));
+  }
+
+  createOrderStack(BuildContext context) {
+    return Stack(
+      children: [
+        createNewOrderBody(context),
+        BlocBuilder<CreateNewOrderBloc, CreateNewOrderState>(
+          builder: (context, state) {
+            if (state is CreateNewOrderApiLoading) {
+              return const AppLoader();
+            } else {
+              return Container();
+            }
+          },
+        )
+      ],
+    );
   }
 
   createNewOrderBody(BuildContext context) {
@@ -85,32 +143,53 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
         child: Column(children: [
           appHeader(context),
           customerSearchTab(context),
-          SizedBox(
-            height: SizeUtils.getScreenHeight(context, 2),
-          ),
-          perviousOrderBox(context),
-          brandSelection(context),
-          Container(
-              decoration: BoxDecoration(
-                color: const Color(
-                    0xFF273180), // Set your desired background color here
-                borderRadius:
-                    BorderRadius.circular(15), // Add border radius if needed
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: SizeUtils.getScreenHeight(context, 2),
+                  ),
+                  perviousOrderBox(context),
+                  brandSelection(context),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        "/viewcart",
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(
+                              0xFF273180), // Set your desired background color here
+                          borderRadius: BorderRadius.circular(
+                              15), // Add border radius if needed
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              SizeUtils.getScreenWidth(context, 8),
+                              SizeUtils.getScreenHeight(context, 1),
+                              SizeUtils.getScreenWidth(context, 8),
+                              SizeUtils.getScreenHeight(context, 1)),
+                          child: Text(
+                            "View Cart",
+                            style: TextStyle(
+                                fontSize:
+                                    SizeUtils.getDynamicFontSize(context, 2),
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        )),
+                  ),
+                  SizedBox(
+                    height: SizeUtils.getScreenHeight(context, 2),
+                  ),
+                ],
               ),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                    SizeUtils.getScreenWidth(context, 8),
-                    SizeUtils.getScreenHeight(context, 1),
-                    SizeUtils.getScreenWidth(context, 8),
-                    SizeUtils.getScreenHeight(context, 1)),
-                child: Text(
-                  "View Cart",
-                  style: TextStyle(
-                      fontSize: SizeUtils.getDynamicFontSize(context, 2),
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ))
+            ),
+          ),
         ]));
   }
 
@@ -385,7 +464,11 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
 
   brandSelection(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(SizeUtils.getScreenWidth(context, 4)),
+      padding: EdgeInsets.fromLTRB(
+          SizeUtils.getScreenWidth(context, 4),
+          SizeUtils.getScreenHeight(context, 2),
+          SizeUtils.getScreenWidth(context, 4),
+          SizeUtils.getScreenHeight(context, 1)),
       child: Column(
         children: <Widget>[
           Card(
@@ -397,7 +480,7 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
                   height: SizeUtils.getScreenHeight(context, 2),
                 ),
                 brandList(context),
-                productList(context),
+                productListWidget(context),
               ],
             ),
           ),
@@ -430,6 +513,13 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
           Expanded(
             flex: 1,
             child: TextField(
+              controller: searchController,
+              onChanged: (value) {
+                setState(() {
+                  searchedBrand = value;
+                  getBrandList();
+                });
+              },
               decoration: InputDecoration(
                 hintText: 'Search brands',
                 border: OutlineInputBorder(
@@ -462,41 +552,18 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
         scrollDirection: Axis.horizontal,
         itemCount: brands.length,
         itemBuilder: (context, index) {
-          return Stack(
-            children: [
-              Card(
-                margin: EdgeInsets.all(10),
-                child: Container(
-                    height: SizeUtils.getScreenHeight(context, 12),
-                    width: SizeUtils.getScreenWidth(context, 18),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: brands[index].imageUrl.toString().isEmpty
-                            ? const AssetImage('assets/images/logo.png')
-                                as ImageProvider<Object>
-                            : NetworkImage(brands[index].imageUrl.toString())
-                                as ImageProvider<Object>,
-                        fit: BoxFit.cover,
-                      ),
-                    )), // Set appropriate size
-              ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: Checkbox(
-                  value:
-                      false, // You can manage the state by using a stateful widget
-                  onChanged: (bool? newValue) {},
-                ),
-              ),
-            ],
+          return BrandOrderCreate(
+            selectedBrand: (String brandId, String brandName_, bool isAdded) {
+              getFilterForProduct(brandId, brandName_, isAdded);
+            },
+            brands: brands[index],
           );
         },
       ),
     );
   }
 
-  productList(BuildContext context) {
+  productListWidget(BuildContext context) {
     return Column(
       children: [
         selectedBrandNameLayout(context),
@@ -524,7 +591,7 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Nirapara, Pavizham',
+              brandName,
               style: TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: SizeUtils.getDynamicFontSize(context, 2.3)),
@@ -542,14 +609,16 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 isExpanded: true,
-                value: selectedCustomer,
+                value: selectedProductType,
                 hint: Text('Product type'),
                 onChanged: (newValue) {
                   setState(() {
-                    selectedCustomer = newValue;
+                    selectedProductType = newValue;
+                    getProductIdFromProductList();
+                    getProductList();
                   });
                 },
-                items: customerNameList
+                items: productTypeNameList
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -566,12 +635,14 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
 
   productListFromBrand(BuildContext context) {
     return Container(
-      height: SizeUtils.getScreenHeight(context, 23),
+      height: SizeUtils.getScreenHeight(context, 28),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 45,
+        itemCount: productList.length,
         itemBuilder: (context, index) {
-          return const Product();
+          return Product(
+            productModel: productList[index],
+          );
         },
       ),
     );
@@ -592,5 +663,38 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
         )
       ],
     );
+  }
+
+  void getFilterForProduct(String brandId, String brandName_, bool isAdded) {
+    brandId_ = brandId;
+    setState(() {
+      brandName = brandName_;
+    });
+    getProductIdFromProductList();
+    getProductList();
+  }
+
+  getProductIdFromProductList() {
+    if (selectedProductType != null) {
+      productTypeId = productTypeList
+          .where((item) => item.name.toString() == selectedProductType)
+          .first
+          .id
+          .toString();
+    }
+  }
+
+  getProductList() {
+    context
+        .read<CreateNewOrderBloc>()
+        .add(ProductListFetching(productTypeId, brandId_));
+  }
+
+  void getBrandList() {
+    if (searchedBrand.length > 3) {
+      context
+          .read<CreateNewOrderBloc>()
+          .add(ShowAllBrandForTheUser(searchedBrand));
+    }
   }
 }

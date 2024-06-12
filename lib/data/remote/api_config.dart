@@ -4,4 +4,8 @@ class Config {
   static const login = 'login';
   static const branchList = 'brandList';
   static const customerList = 'cutomerList';
+  static const productTypeList = 'product_type_list';
+  static const productList = 'productList';
+  static const addToCart = 'addToCart';
+  static const cartList = 'cartList';
 }

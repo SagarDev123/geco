@@ -5,7 +5,11 @@ sealed class CreateNewOrderEvent {}
 
 class CustomerFetchingEvent extends CreateNewOrderEvent {}
 
-class ShowAllBrandForTheUser extends CreateNewOrderEvent {}
+class ShowAllBrandForTheUser extends CreateNewOrderEvent {
+  final String brandName;
+
+  ShowAllBrandForTheUser(this.brandName);
+}
 
 class ProductListById extends CreateNewOrderEvent {
   final String brandId;
@@ -17,4 +21,20 @@ class AddToCart extends CreateNewOrderEvent {
   final String productId;
   final int quantity;
   AddToCart({required this.productId, required this.quantity});
+}
+
+class ProductType extends CreateNewOrderEvent {}
+
+class AddToCartEvent extends CreateNewOrderEvent {
+  final String productId;
+  final String quanity;
+
+  AddToCartEvent({required this.productId, required this.quanity});
+}
+
+class ProductListFetching extends CreateNewOrderEvent {
+  final String productTypeId;
+  final String brandId;
+
+  ProductListFetching(this.productTypeId, this.brandId);
 }
