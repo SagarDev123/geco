@@ -16,3 +16,5 @@ class CustomerFailure extends CustomerState {
   final String error;
   CustomerFailure({required this.error});
 }
+
+class AddCustomerSuccess extends CustomerState {}

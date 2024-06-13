@@ -47,9 +47,9 @@ class CartData {
     required this.gstamount,
   });
 
-  final double? total;
-  final int? taxable;
-  final int? gstamount;
+  final dynamic total;
+  final dynamic taxable;
+  final dynamic gstamount;
 
   factory CartData.fromJson(Map<String, dynamic> json) {
     return CartData(

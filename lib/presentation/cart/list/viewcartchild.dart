@@ -39,6 +39,12 @@ class _ViewCartChildState extends State<ViewCartChild> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    quantity = int.parse(widget.cartList.quantity!);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return productDetails(context);
   }

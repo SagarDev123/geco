@@ -20,12 +20,19 @@ class CustomerList extends StatefulWidget {
 class _CustomerListState extends State<CustomerList> {
   TextEditingController searchController = TextEditingController();
   List<Datum> customers = [];
+  String searchedName = '';
+
+  TextEditingController customerNameController = TextEditingController();
+  TextEditingController storeNameController = TextEditingController();
+  TextEditingController mobileNumberController = TextEditingController();
+  TextEditingController gstNumberController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     context.read<CustomerBloc>().add(
-          CustomerListFetching(),
+          CustomerListFetching(searchedName),
         );
   }
 
@@ -51,6 +58,15 @@ class _CustomerListState extends State<CustomerList> {
             setState(() {
               customers = state.customers;
             });
+          } else if (state is AddCustomerSuccess) {
+            customerNameController.text = '';
+            storeNameController.text = '';
+            gstNumberController.text = '';
+            mobileNumberController.text = '';
+            addressController.text = '';
+            context.read<CustomerBloc>().add(
+                  CustomerListFetching(searchedName),
+                );
           }
         },
         child: customerStack(),
@@ -159,8 +175,17 @@ class _CustomerListState extends State<CustomerList> {
           SizedBox(
             width: SizeUtils.getScreenWidth(context, 7),
             height: SizeUtils.getScreenHeight(context, 7),
-            child: Image.asset(
-              'assets/images/cart.png',
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  "/viewcart",
+                  (Route<dynamic> route) => false,
+                );
+              },
+              child: Image.asset(
+                'assets/images/cart.png',
+              ),
             ),
           ),
           SizedBox(
@@ -183,7 +208,9 @@ class _CustomerListState extends State<CustomerList> {
 
   addCutomerButton(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        showAddCustomerDialog(context);
+      },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
         child: Container(
@@ -249,6 +276,12 @@ class _CustomerListState extends State<CustomerList> {
               SizedBox(
                 width: SizeUtils.getScreenWidth(context, 70),
                 child: TextField(
+                  onChanged: (value) {
+                    searchedName = value;
+                    context
+                        .read<CustomerBloc>()
+                        .add(CustomerListFetching(searchedName));
+                  },
                   controller: searchController,
                   decoration: InputDecoration(
                     hintText: Constants.searchByCustomer,
@@ -407,6 +440,80 @@ class _CustomerListState extends State<CustomerList> {
           ),
         ]),
       ),
+    );
+  }
+
+  void showAddCustomerDialog(BuildContext context_) {
+    showDialog(
+      context: context_,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Add New Customer'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  controller: customerNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Name*',
+                    hintText: 'Enter Store Owner Name',
+                  ),
+                ),
+                TextField(
+                  controller: storeNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Store Name*',
+                    hintText: 'Ex: Vijaya Store',
+                  ),
+                ),
+                TextField(
+                  controller: mobileNumberController,
+                  decoration: const InputDecoration(
+                    labelText: 'Mobile Number*',
+                    hintText: 'Enter 10 digit number',
+                  ),
+                  keyboardType: TextInputType.phone,
+                ),
+                TextField(
+                  controller: gstNumberController,
+                  decoration: const InputDecoration(
+                    labelText: 'GST Number',
+                    hintText: 'Enter GST No.(if any)',
+                  ),
+                ),
+                TextField(
+                  controller: addressController,
+                  decoration: const InputDecoration(
+                    labelText: 'Address*',
+                    hintText: 'Enter Address',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Add'),
+              onPressed: () {
+                // Implement your add customer logic here
+                context_.read<CustomerBloc>().add(AddNewCustomer(
+                    customerNameController.text,
+                    storeNameController.text,
+                    mobileNumberController.text,
+                    gstNumberController.text,
+                    addressController.text));
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

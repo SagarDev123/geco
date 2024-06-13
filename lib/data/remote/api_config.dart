@@ -7,5 +7,7 @@ class Config {
   static const productTypeList = 'product_type_list';
   static const productList = 'productList';
   static const addToCart = 'addToCart';
+  static const orderNow = 'saveSalesOrder';
   static const cartList = 'cartList';
+  static const saveCustomer = 'saveCustomer';
 }

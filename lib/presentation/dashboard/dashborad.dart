@@ -152,8 +152,17 @@ class _DashboardState extends State<Dashboard> {
           SizedBox(
             width: SizeUtils.getScreenWidth(context, 7),
             height: SizeUtils.getScreenHeight(context, 7),
-            child: Image.asset(
-              'assets/images/cart.png',
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  "/viewcart",
+                  (Route<dynamic> route) => false,
+                );
+              },
+              child: Image.asset(
+                'assets/images/cart.png',
+              ),
             ),
           ),
           SizedBox(

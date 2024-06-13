@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geco/data/model/itemsincartmodel.dart';
 import 'package:geco/presentation/cart/bloc/view_cart_bloc.dart';
+import 'package:status_alert/status_alert.dart';
 
+import '../../data/model/customer.dart';
 import '../../utils/api_loader.dart';
 import '../../utils/constants.dart';
 import '../../utils/sizeutils.dart';
@@ -22,10 +24,17 @@ class _ViewCartState extends State<ViewCart> {
   String gstNumber = '';
   String total = '';
   String totalToPay = '';
+  String? selectedCustomer;
+  List<String> customerNameList = [];
+  List<Datum> customers = [];
+  String customerId = '';
+  bool isEmptyCart = false;
+  bool isCart = true;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    context.read<ViewCartBloc>().add(CustomerFetchingEvent());
     context.read<ViewCartBloc>().add(ViewCartFetchCartItems());
   }
 
@@ -53,6 +62,43 @@ class _ViewCartState extends State<ViewCart> {
                 textColor: Colors.white,
                 fontSize: 16.0);
             context.read<ViewCartBloc>().add(ViewCartFetchCartItems());
+          } else if (state is OnOrderNowCompleted) {
+            Fluttertoast.showToast(
+                msg: 'Order placed successfully',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0);
+            context.read<ViewCartBloc>().add(ViewCartFetchCartItems());
+          } else if (state is CustomerListFetched) {
+            setState(() {
+              customers = state.customers;
+            });
+          } else if (state is CustomerNameListFetched) {
+            setState(() {
+              customerNameList = state.customerNames;
+            });
+          } else if (state is ViewCartFailure) {
+            if (state.error == Constants.emptyCart) {
+              setState(() {
+                isCart = false;
+                isEmptyCart = true;
+              });
+            } else {
+              StatusAlert.show(
+                context,
+                padding: const EdgeInsets.all(10.0),
+                duration: const Duration(seconds: 2),
+                title: 'Alert',
+                subtitle: state.error,
+                subtitleOptions: StatusAlertTextConfiguration(
+                    maxLines: 2, overflow: TextOverflow.ellipsis),
+                configuration: const IconConfiguration(icon: Icons.error),
+                maxWidth: 300,
+              );
+            }
           }
         },
         child: viewCartStack(context),
@@ -136,38 +182,20 @@ class _ViewCartState extends State<ViewCart> {
                 SizedBox(
                   height: SizeUtils.getScreenWidth(context, 2),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        "/dashboard",
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                    child: Text(
-                      Constants.createNewOrderToDashboard,
-                      style: TextStyle(
-                          fontSize: SizeUtils.getDynamicFontSize(context, 2),
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white),
-                    ),
-                  ),
-                ),
+                redirectionWidget(context),
               ],
             ),
           ),
-          SizedBox(
-            width: SizeUtils.getScreenWidth(context, 7),
-            height: SizeUtils.getScreenHeight(context, 7),
-            child: Image.asset(
-              'assets/images/cart.png',
-            ),
-          ),
-          SizedBox(
-            width: SizeUtils.getScreenWidth(context, 2),
-          ),
+          // SizedBox(
+          //   width: SizeUtils.getScreenWidth(context, 7),
+          //   height: SizeUtils.getScreenHeight(context, 7),
+          //   child: Image.asset(
+          //     'assets/images/cart.png',
+          //   ),
+          // ),
+          // SizedBox(
+          //   width: SizeUtils.getScreenWidth(context, 2),
+          // ),
           SizedBox(
             width: SizeUtils.getScreenWidth(context, 7),
             height: SizeUtils.getScreenHeight(context, 7),
@@ -193,48 +221,153 @@ class _ViewCartState extends State<ViewCart> {
       ),
       child: Column(children: [
         appHeader(context),
-        cartListWidget(context),
+        customerSearchTab(context),
+        Expanded(child: cartListWidget(context)),
       ]),
     );
   }
 
-  cartListWidget(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(SizeUtils.getScreenWidth(context, 3)),
-      child: Card(
-        elevation: 4.0,
-        margin: EdgeInsets.all(SizeUtils.getScreenWidth(context, 2)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15), // Set the radius here
-        ),
-        child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          Padding(
-            padding: EdgeInsets.all(SizeUtils.getScreenWidth(context, 2)),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                Constants.cartLists,
+  Widget customerSearchTab(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xFF78BB43)),
+        color:
+            const Color(0xFFFFFFFF), // Set your desired background color here
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.zero,
+            topRight: Radius.zero,
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(12)), // Add border radius if needed
+      ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+            SizeUtils.getScreenWidth(context, 2),
+            SizeUtils.getScreenHeight(context, 2),
+            SizeUtils.getScreenWidth(context, 2),
+            SizeUtils.getScreenHeight(context, 2)),
+        child: IntrinsicWidth(
+          child: Row(
+            children: [
+              Text(
+                Constants.customerName,
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: SizeUtils.getDynamicFontSize(context, 2.2)),
+                    fontWeight: FontWeight.w500,
+                    fontSize: SizeUtils.getDynamicFontSize(context, 2.3)),
               ),
-            ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      value: selectedCustomer,
+                      hint: Text('Select Customer'),
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedCustomer = newValue;
+                          getCustomerIdFromList();
+                        });
+                      },
+                      items: customerNameList
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          Container(
-            width: double.infinity,
-            height: 0.5,
-            color: Colors.black,
-          ),
-          cartItems(context),
-          totalPriceLayout(context),
-          totalPriceIncludingTax(context),
-        ]),
+        ),
       ),
     );
   }
 
-  cartItems(BuildContext context) {
+  Widget cartListWidget(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(SizeUtils.getScreenWidth(context, 3)),
+        child: Card(
+          elevation: 4.0,
+          margin: EdgeInsets.all(SizeUtils.getScreenWidth(context, 2)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15), // Set the radius here
+          ),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(SizeUtils.getScreenWidth(context, 2)),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      Constants.cartLists,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: SizeUtils.getDynamicFontSize(context, 2.2)),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 0.5,
+                  color: Colors.black,
+                ),
+                Visibility(visible: isEmptyCart, child: emptyCart(context)),
+                Visibility(visible: isCart, child: cartItems(context)),
+                totalPriceLayout(context),
+                totalPriceIncludingTax(context),
+                orderNowButton(context),
+              ]),
+        ),
+      ),
+    );
+  }
+
+  orderNowButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.read<ViewCartBloc>().add(OrderNow(customersId: customerId));
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(2, 10, 2, 2),
+        child: Container(
+            decoration: BoxDecoration(
+              color: const Color(
+                  0xFF273180), // Set your desired background color here
+              borderRadius:
+                  BorderRadius.circular(15), // Add border radius if needed
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: 0,
+                  top: SizeUtils.getScreenHeight(context, 2),
+                  right: 0,
+                  bottom: SizeUtils.getScreenHeight(context, 2)),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  Constants.orderNow,
+                  style: TextStyle(
+                      fontSize: SizeUtils.getDynamicFontSize(context, 2.4),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ),
+            )),
+      ),
+    );
+  }
+
+  Widget cartItems(BuildContext context) {
     return Container(
         height: SizeUtils.getScreenHeight(context, 50),
         child: ListView.builder(
@@ -355,6 +488,78 @@ class _ViewCartState extends State<ViewCart> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  redirectionWidget(BuildContext context) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              "/dashboard",
+              (Route<dynamic> route) => false,
+            );
+          },
+          child: Text(
+            Constants.dashBoard,
+            style: TextStyle(
+                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontWeight: FontWeight.w500,
+                color: const Color(0XFF79A544)),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              "/createneworder",
+              (Route<dynamic> route) => false,
+            );
+          },
+          child: Text(
+            Constants.createneworder,
+            style: TextStyle(
+                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontWeight: FontWeight.w500,
+                color: const Color(0XFF588230)),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {},
+          child: Text(
+            Constants.viewCart,
+            style: TextStyle(
+                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontWeight: FontWeight.w500,
+                color: Colors.white),
+          ),
+        )
+      ],
+    );
+  }
+
+  void getCustomerIdFromList() {
+    customerId = customers
+        .where((item) => item.name.toString() == selectedCustomer)
+        .first
+        .id
+        .toString();
+  }
+
+  Widget emptyCart(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: SizeUtils.getScreenHeight(context, 40),
+      child: Center(
+        child: Text(
+          Constants.emptyCart,
+          style: TextStyle(
+              fontSize: SizeUtils.getDynamicFontSize(context, 3),
+              fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

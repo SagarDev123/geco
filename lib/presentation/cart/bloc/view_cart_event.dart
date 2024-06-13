@@ -5,7 +5,13 @@ sealed class ViewCartEvent {}
 
 class ViewCartFetchCartItems extends ViewCartEvent {}
 
-class OrderNow extends ViewCartEvent {}
+class OrderNow extends ViewCartEvent {
+  final String customersId;
+
+  OrderNow({required this.customersId});
+}
+
+class CustomerFetchingEvent extends ViewCartEvent {}
 
 class ViewCartRemoveCartItem extends ViewCartEvent {
   final String id;

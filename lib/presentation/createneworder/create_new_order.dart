@@ -42,7 +42,7 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
   @override
   void initState() {
     super.initState();
-    context.read<CreateNewOrderBloc>().add(CustomerFetchingEvent());
+    //  context.read<CreateNewOrderBloc>().add(CustomerFetchingEvent());
     context
         .read<CreateNewOrderBloc>()
         .add(ShowAllBrandForTheUser(searchedBrand));
@@ -142,7 +142,6 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
         ),
         child: Column(children: [
           appHeader(context),
-          customerSearchTab(context),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -365,33 +364,21 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
                 SizedBox(
                   height: SizeUtils.getScreenWidth(context, 2),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        "/dashboard",
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                    child: Text(
-                      Constants.createNewOrderToDashboard,
-                      style: TextStyle(
-                          fontSize: SizeUtils.getDynamicFontSize(context, 2),
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white),
-                    ),
-                  ),
-                ),
+                redirectionWidget(context),
               ],
             ),
           ),
           SizedBox(
             width: SizeUtils.getScreenWidth(context, 7),
             height: SizeUtils.getScreenHeight(context, 7),
-            child: Image.asset(
-              'assets/images/cart.png',
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, "/viewcart", (Route<dynamic> route) => false);
+              },
+              child: Image.asset(
+                'assets/images/cart.png',
+              ),
             ),
           ),
           SizedBox(
@@ -409,6 +396,45 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
           ),
         ],
       ),
+    );
+  }
+
+  redirectionWidget(BuildContext context) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              "/dashboard",
+              (Route<dynamic> route) => false,
+            );
+          },
+          child: Text(
+            Constants.dashBoard,
+            style: TextStyle(
+                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontWeight: FontWeight.w500,
+                color: const Color(0XFF79A544)),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              "/createneworder",
+              (Route<dynamic> route) => false,
+            );
+          },
+          child: Text(
+            Constants.createneworder,
+            style: TextStyle(
+                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontWeight: FontWeight.w500,
+                color: Colors.white),
+          ),
+        ),
+      ],
     );
   }
 

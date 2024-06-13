@@ -15,6 +15,16 @@ class ViewCartFailure extends ViewCartState {
   });
 }
 
+class CustomerNameListFetched extends ViewCartState {
+  final List<String> customerNames;
+  CustomerNameListFetched({required this.customerNames});
+}
+
+class CustomerListFetched extends ViewCartState {
+  final List<Datum> customers;
+  CustomerListFetched({required this.customers});
+}
+
 class ViewCartItemFetchSuccess extends ViewCartState {
   final List<CartList> cartList;
   final String taxable;
@@ -31,3 +41,5 @@ class ViewCartItemFetchSuccess extends ViewCartState {
 }
 
 class ViewCartItemUpdated extends ViewCartState {}
+
+class OnOrderNowCompleted extends ViewCartState {}
