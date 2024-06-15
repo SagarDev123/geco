@@ -235,25 +235,35 @@ class _DashboardState extends State<Dashboard> {
             SizedBox(
               width: SizeUtils.getScreenWidth(context, 2),
             ),
-            Container(
-                padding: EdgeInsets.fromLTRB(
-                    SizeUtils.getScreenWidth(context, 8),
-                    SizeUtils.getScreenHeight(context, 1),
-                    SizeUtils.getScreenWidth(context, 8),
-                    SizeUtils.getScreenHeight(context, 1)),
-                decoration: BoxDecoration(
-                  color: const Color(
-                      0xFF1E1E1E), // Set your desired background color here
-                  borderRadius: BorderRadius.circular(SizeUtils.getScreenWidth(
-                      context, 1)), // Add border radius if needed
-                ),
-                child: Text(
-                  Constants.previousOrderList,
-                  style: TextStyle(
-                      color: const Color(0xFFFFFFFF),
-                      fontSize: SizeUtils.getDynamicFontSize(context, 1.6),
-                      fontWeight: FontWeight.w500),
-                ))
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  "/preorder",
+                  (Route<dynamic> route) => false,
+                );
+              },
+              child: Container(
+                  padding: EdgeInsets.fromLTRB(
+                      SizeUtils.getScreenWidth(context, 8),
+                      SizeUtils.getScreenHeight(context, 1),
+                      SizeUtils.getScreenWidth(context, 8),
+                      SizeUtils.getScreenHeight(context, 1)),
+                  decoration: BoxDecoration(
+                    color: const Color(
+                        0xFF1E1E1E), // Set your desired background color here
+                    borderRadius: BorderRadius.circular(
+                        SizeUtils.getScreenWidth(
+                            context, 1)), // Add border radius if needed
+                  ),
+                  child: Text(
+                    Constants.previousOrderList,
+                    style: TextStyle(
+                        color: const Color(0xFFFFFFFF),
+                        fontSize: SizeUtils.getDynamicFontSize(context, 1.6),
+                        fontWeight: FontWeight.w500),
+                  )),
+            )
           ],
         ),
       ),

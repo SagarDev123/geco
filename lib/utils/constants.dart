@@ -5,6 +5,7 @@ class Constants {
   static const String email = 'Email';
   static const String password = 'Password';
   static const String loginNow = 'Login Now';
+  static const String previousOrder = 'Previous Order';
   static const String orderNow = 'Order Now';
   static const String createNewOrder = 'Create New Order';
   static const String loginSuccessMessage = 'User login successfully';
@@ -30,5 +31,12 @@ class Constants {
   static const String createneworder = 'CreateNewOrder/';
   static const String viewCart = 'View Cart';
   static const String cartLists = "Cart Lists";
+  static const String preorder = '/PreOrder';
   static const String emptyCart = "Your cart is empty, Please add some items!";
+
+  static const String cartItems = 'Cart Items';
+
+  static const String reOrder = 'Reorder Now';
+
+  static const String customers = 'Customers';
 }

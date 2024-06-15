@@ -14,7 +14,7 @@ class DashboardRepository {
       endpoint: Config.branchList,
       body: requestBody,
     );
-    print(response);
+
     Brand resp = Brand.fromJson(response);
     return resp;
   }

@@ -10,4 +10,6 @@ class Config {
   static const orderNow = 'saveSalesOrder';
   static const cartList = 'cartList';
   static const saveCustomer = 'saveCustomer';
+  static const previousOrder = "previousOrderList";
+  static const reOrder = "reOrder";
 }

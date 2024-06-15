@@ -150,25 +150,7 @@ class _CustomerListState extends State<CustomerList> {
                 SizedBox(
                   height: SizeUtils.getScreenWidth(context, 2),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        "/dashboard",
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                    child: Text(
-                      Constants.customerToDashboard,
-                      style: TextStyle(
-                          fontSize: SizeUtils.getDynamicFontSize(context, 2),
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white),
-                    ),
-                  ),
-                ),
+                redirectionWidget(context),
               ],
             ),
           ),
@@ -203,6 +185,39 @@ class _CustomerListState extends State<CustomerList> {
           ),
         ],
       ),
+    );
+  }
+
+  redirectionWidget(BuildContext context) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              "/dashboard",
+              (Route<dynamic> route) => false,
+            );
+          },
+          child: Text(
+            Constants.dashBoard,
+            style: TextStyle(
+                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontWeight: FontWeight.w500,
+                color: const Color(0XFF79A544)),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {},
+          child: Text(
+            Constants.customers,
+            style: TextStyle(
+                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontWeight: FontWeight.w500,
+                color: Colors.white),
+          ),
+        )
+      ],
     );
   }
 

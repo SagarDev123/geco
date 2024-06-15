@@ -10,10 +10,13 @@ import 'package:geco/presentation/customers/bloc/customer_bloc.dart';
 import 'package:geco/presentation/customers/customers.dart';
 import 'package:geco/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:geco/presentation/dashboard/dashborad.dart';
+import 'package:geco/presentation/preorder/bloc/preorder_bloc.dart';
+import 'package:geco/presentation/preorder/preorder.dart';
 import 'package:geco/repository/create_new_order_repository.dart';
 import 'package:geco/repository/customer_repository.dart';
 import 'package:geco/repository/dashboard_repository.dart';
 import 'package:geco/repository/login_repository.dart';
+import 'package:geco/repository/preorder_repository.dart';
 import 'package:geco/repository/viewcart_repository.dart';
 
 void main() {
@@ -62,6 +65,12 @@ class MyApp extends StatelessWidget {
               create: (context) =>
                   ViewCartBloc(viewCartRepository: ViewCartRepository()),
               child: const ViewCart(),
+            ),
+        '/preorder': (context) => BlocProvider(
+              create: (context) => PreorderBloc(
+                  preOrderRepository: PreOrderRepository(),
+                  dashboardRepository: DashboardRepository()),
+              child: const PreOrder(),
             ),
         // '/signup': (context) => const SignUp(),
         // '/signupDetails': (context) => const SignUpUserDetails(),
