@@ -443,7 +443,7 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
             );
           },
           child: Text(
-            Constants.createneworder,
+            Constants.createNewOrder,
             style: TextStyle(
                 fontSize: SizeUtils.getDynamicFontSize(context, 2),
                 fontWeight: FontWeight.w500,

@@ -515,11 +515,7 @@ class _PreOrderState extends State<PreOrder> {
           appHeader(context),
           customerSearchTab(context),
           brandCard(context),
-          preOrderItemListWidget(context),
-          SizedBox(
-            height: SizeUtils.getScreenHeight(context, 2),
-          ),
-          reOredrButton(context)
+          Expanded(child: bodyScrollWidget(context)),
         ],
       ),
     );
@@ -639,6 +635,20 @@ class _PreOrderState extends State<PreOrder> {
                 )),
               )),
           totalPriceLayout(context),
+        ],
+      ),
+    );
+  }
+
+  Widget bodyScrollWidget(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          preOrderItemListWidget(context),
+          SizedBox(
+            height: SizeUtils.getScreenHeight(context, 2),
+          ),
+          reOredrButton(context)
         ],
       ),
     );

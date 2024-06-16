@@ -74,7 +74,11 @@ class _ViewCartState extends State<ViewCart> {
                 backgroundColor: Colors.red,
                 textColor: Colors.white,
                 fontSize: 16.0);
-            context.read<ViewCartBloc>().add(ViewCartFetchCartItems());
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              "/preorder",
+              (Route<dynamic> route) => false,
+            );
           } else if (state is CustomerListFetched) {
             setState(() {
               customers = state.customers;
