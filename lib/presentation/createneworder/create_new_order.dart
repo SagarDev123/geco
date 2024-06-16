@@ -12,7 +12,9 @@ import 'package:status_alert/status_alert.dart';
 
 import '../../utils/api_loader.dart';
 import '../../utils/constants.dart';
+import '../../utils/sharedpreferencehelper.dart';
 import '../../utils/sizeutils.dart';
+import '../../utils/utils.dart';
 
 class CreateNewOrder extends StatefulWidget {
   const CreateNewOrder({super.key});
@@ -149,7 +151,7 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
                   SizedBox(
                     height: SizeUtils.getScreenHeight(context, 2),
                   ),
-                  perviousOrderBox(context),
+                  //perviousOrderBox(context),
                   brandSelection(context),
                   GestureDetector(
                     onTap: () {
@@ -384,11 +386,25 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
           SizedBox(
             width: SizeUtils.getScreenWidth(context, 2),
           ),
-          SizedBox(
-            width: SizeUtils.getScreenWidth(context, 7),
-            height: SizeUtils.getScreenHeight(context, 7),
-            child: Image.asset(
-              'assets/images/man.png',
+          GestureDetector(
+            onTap: () {
+              Utils.exitUser(context, (confirmed) {
+                if (confirmed) {
+                  SharedPreferenceHelper.clearContent();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    "/",
+                    (Route<dynamic> route) => false,
+                  );
+                } else {}
+              });
+            },
+            child: SizedBox(
+              width: SizeUtils.getScreenWidth(context, 7),
+              height: SizeUtils.getScreenHeight(context, 7),
+              child: Image.asset(
+                'assets/images/man.png',
+              ),
             ),
           ),
           SizedBox(

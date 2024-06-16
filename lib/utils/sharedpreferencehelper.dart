@@ -30,4 +30,15 @@ class SharedPreferenceHelper {
     }
     return null;
   }
+
+  static Future<void> clearContent() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userData'); // Remove user data from SharedPreferences
+  }
+
+  static Future<bool> isContentExist() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userData = prefs.getString('userData');
+    return userData != null; // Return true if userData exists, false otherwise
+  }
 }

@@ -7,7 +7,9 @@ import 'package:status_alert/status_alert.dart';
 import '../../data/model/customer.dart';
 import '../../utils/api_loader.dart';
 import '../../utils/constants.dart';
+import '../../utils/sharedpreferencehelper.dart';
 import '../../utils/sizeutils.dart';
+import '../../utils/utils.dart';
 import 'list/customer.dart';
 
 class CustomerList extends StatefulWidget {
@@ -173,11 +175,25 @@ class _CustomerListState extends State<CustomerList> {
           SizedBox(
             width: SizeUtils.getScreenWidth(context, 2),
           ),
-          SizedBox(
-            width: SizeUtils.getScreenWidth(context, 7),
-            height: SizeUtils.getScreenHeight(context, 7),
-            child: Image.asset(
-              'assets/images/man.png',
+          GestureDetector(
+            onTap: () {
+              Utils.exitUser(context, (confirmed) {
+                if (confirmed) {
+                  SharedPreferenceHelper.clearContent();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    "/",
+                    (Route<dynamic> route) => false,
+                  );
+                } else {}
+              });
+            },
+            child: SizedBox(
+              width: SizeUtils.getScreenWidth(context, 7),
+              height: SizeUtils.getScreenHeight(context, 7),
+              child: Image.asset(
+                'assets/images/man.png',
+              ),
             ),
           ),
           SizedBox(

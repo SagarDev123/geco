@@ -3,12 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geco/data/model/itemsincartmodel.dart';
 import 'package:geco/presentation/cart/bloc/view_cart_bloc.dart';
+import 'package:geco/utils/sharedpreferencehelper.dart';
+import 'package:geco/utils/utils.dart';
 import 'package:status_alert/status_alert.dart';
 
 import '../../data/model/customer.dart';
 import '../../utils/api_loader.dart';
 import '../../utils/constants.dart';
 import '../../utils/sizeutils.dart';
+
 import 'list/viewcartchild.dart';
 
 class ViewCart extends StatefulWidget {
@@ -196,11 +199,25 @@ class _ViewCartState extends State<ViewCart> {
           // SizedBox(
           //   width: SizeUtils.getScreenWidth(context, 2),
           // ),
-          SizedBox(
-            width: SizeUtils.getScreenWidth(context, 7),
-            height: SizeUtils.getScreenHeight(context, 7),
-            child: Image.asset(
-              'assets/images/man.png',
+          GestureDetector(
+            onTap: () {
+              Utils.exitUser(context, (confirmed) {
+                if (confirmed) {
+                  SharedPreferenceHelper.clearContent();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    "/",
+                    (Route<dynamic> route) => false,
+                  );
+                } else {}
+              });
+            },
+            child: SizedBox(
+              width: SizeUtils.getScreenWidth(context, 7),
+              height: SizeUtils.getScreenHeight(context, 7),
+              child: Image.asset(
+                'assets/images/man.png',
+              ),
             ),
           ),
           SizedBox(
