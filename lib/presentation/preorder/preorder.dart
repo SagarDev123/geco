@@ -503,7 +503,6 @@ class _PreOrderState extends State<PreOrder> {
 
   preOrderBody() {
     return Container(
-      padding: EdgeInsets.all(SizeUtils.getScreenWidth(context, 4)),
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/app_background.jpeg'),
@@ -642,14 +641,17 @@ class _PreOrderState extends State<PreOrder> {
 
   Widget bodyScrollWidget(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          preOrderItemListWidget(context),
-          SizedBox(
-            height: SizeUtils.getScreenHeight(context, 2),
-          ),
-          reOredrButton(context)
-        ],
+      child: Padding(
+        padding: EdgeInsets.all(SizeUtils.getScreenWidth(context, 5)),
+        child: Column(
+          children: [
+            preOrderItemListWidget(context),
+            SizedBox(
+              height: SizeUtils.getScreenHeight(context, 2),
+            ),
+            reOredrButton(context)
+          ],
+        ),
       ),
     );
   }
