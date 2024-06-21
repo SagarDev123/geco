@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geco/locator.dart';
 import 'package:geco/login/bloc/login_bloc_bloc.dart';
 import 'package:geco/login/loginscreen.dart';
 import 'package:geco/presentation/cart/bloc/view_cart_bloc.dart';
@@ -20,11 +21,15 @@ import 'package:geco/repository/preorder_repository.dart';
 import 'package:geco/repository/viewcart_repository.dart';
 import 'package:geco/utils/sharedpreferencehelper.dart';
 
+import 'repository/remotedatarepository.dart';
+
 void main() {
+  setUp();
   runApp(MultiBlocProvider(providers: [
     BlocProvider<LoginBlocBloc>(
-      create: (BuildContext context) =>
-          LoginBlocBloc(loginRepository: LoginRepository()),
+      create: (BuildContext context) => LoginBlocBloc(
+          loginRepository:
+              LoginRepository(locator.get<RemoteDataRepository>())),
     ),
   ], child: MyApp()));
 }

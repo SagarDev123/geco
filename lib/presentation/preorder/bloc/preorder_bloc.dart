@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:geco/data/remote/exceptions.dart';
+import 'package:geco/locator.dart';
 import 'package:geco/repository/preorder_repository.dart';
+import 'package:geco/repository/remotedatarepository.dart';
 import 'package:meta/meta.dart';
 
 import '../../../data/model/addtocartsuccessmodel.dart';
@@ -29,6 +31,7 @@ class PreorderBloc extends Bloc<PreorderEvent, PreorderState> {
         try {
           emit(PreOrderApiLoading());
           String? token = await SharedPreferenceHelper.getToken();
+
           Customers customers = await preOrderRepository.getCustomerList(token);
           if (customers.data.isEmpty) {
             emit(PreviousOrderFailure(error: "No Customers avaliable for now"));

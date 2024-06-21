@@ -4,7 +4,9 @@ import 'package:geco/repository/remotedatarepository.dart';
 import '../data/remote/api_config.dart';
 
 class LoginRepository {
-  RemoteDataRepository remoteDataRepository = RemoteDataRepository();
+  final RemoteDataRepository remoteDataRepository;
+
+  LoginRepository({required this.remoteDataRepository});
 
   Future<dynamic> loginUser(username, password) async {
     var requestBody = {
