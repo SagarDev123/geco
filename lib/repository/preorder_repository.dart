@@ -6,7 +6,9 @@ import '../data/model/customer.dart';
 import '../data/remote/api_config.dart';
 
 class PreOrderRepository {
-  RemoteDataRepository remoteDataRepository = RemoteDataRepository();
+  final RemoteDataRepository remoteDataRepository;
+
+  PreOrderRepository({required this.remoteDataRepository});
 
   Future<dynamic> getCustomerList(String? token) async {
     var requestBody = {

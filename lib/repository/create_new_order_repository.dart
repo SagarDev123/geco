@@ -8,7 +8,9 @@ import '../data/model/brand.dart';
 import '../data/remote/api_config.dart';
 
 class CreateNewOrderRepository {
-  RemoteDataRepository remoteDataRepository = RemoteDataRepository();
+  final RemoteDataRepository remoteDataRepository;
+
+  CreateNewOrderRepository({required this.remoteDataRepository});
 
   Future<dynamic> getCustomerList(String? token) async {
     var requestBody = {
@@ -49,12 +51,18 @@ class CreateNewOrderRepository {
     return resp;
   }
 
-  getProducts(String? token, String brandId, String productTypeId) async {
+  getProducts(String? token, List<String> brandId, String productTypeId) async {
     var requestBody = {
       "utoken": token,
-      'brand_id': brandId,
+      'brand_id': brandId.toString(),
       'product_type_id': productTypeId
     };
+
+    // var requestBody = {
+    //   "utoken": token,
+    //   'brand_id': brandId,
+    //   'product_type_id': productTypeId
+    // };
     Map<String, dynamic> response =
         await remoteDataRepository.requestRemotePost(
       endpoint: Config.productList,

@@ -34,7 +34,7 @@ class AddToCartEvent extends CreateNewOrderEvent {
 
 class ProductListFetching extends CreateNewOrderEvent {
   final String productTypeId;
-  final String brandId;
+  final List<String> brandId;
 
   ProductListFetching(this.productTypeId, this.brandId);
 }

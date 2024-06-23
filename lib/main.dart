@@ -28,8 +28,8 @@ void main() {
   runApp(MultiBlocProvider(providers: [
     BlocProvider<LoginBlocBloc>(
       create: (BuildContext context) => LoginBlocBloc(
-          loginRepository:
-              LoginRepository(locator.get<RemoteDataRepository>())),
+          loginRepository: LoginRepository(
+              remoteDataRepository: locator.get<RemoteDataRepository>())),
     ),
   ], child: MyApp()));
 }
@@ -53,33 +53,46 @@ class MyApp extends StatelessWidget {
       initialRoute: initialRoute,
       routes: {
         '/': (context) => BlocProvider(
-            create: (context) =>
-                LoginBlocBloc(loginRepository: LoginRepository()),
+            create: (context) => LoginBlocBloc(
+                loginRepository: LoginRepository(
+                    remoteDataRepository: locator.get<RemoteDataRepository>())),
             child: const LoginScreen()),
         '/dashboard': (context) => BlocProvider(
-              create: (context) =>
-                  DashboardBloc(dashboardRepository: DashboardRepository()),
+              create: (context) => DashboardBloc(
+                  dashboardRepository: DashboardRepository(
+                      remoteDataRepository:
+                          locator.get<RemoteDataRepository>())),
               child: const Dashboard(),
             ),
         '/customer': (context) => BlocProvider(
-              create: (context) =>
-                  CustomerBloc(customerRepository: CustomerRepository()),
+              create: (context) => CustomerBloc(
+                  customerRepository: CustomerRepository(
+                      remoteDataRepository:
+                          locator.get<RemoteDataRepository>())),
               child: const CustomerList(),
             ),
         '/createneworder': (context) => BlocProvider(
               create: (context) => CreateNewOrderBloc(
-                  createNewOrderRepository: CreateNewOrderRepository()),
+                  createNewOrderRepository: CreateNewOrderRepository(
+                      remoteDataRepository:
+                          locator.get<RemoteDataRepository>())),
               child: const CreateNewOrder(),
             ),
         '/viewcart': (context) => BlocProvider(
-              create: (context) =>
-                  ViewCartBloc(viewCartRepository: ViewCartRepository()),
+              create: (context) => ViewCartBloc(
+                  viewCartRepository: ViewCartRepository(
+                      remoteDataRepository:
+                          locator.get<RemoteDataRepository>())),
               child: const ViewCart(),
             ),
         '/preorder': (context) => BlocProvider(
               create: (context) => PreorderBloc(
-                  preOrderRepository: PreOrderRepository(),
-                  dashboardRepository: DashboardRepository()),
+                  preOrderRepository: PreOrderRepository(
+                      remoteDataRepository:
+                          locator.get<RemoteDataRepository>()),
+                  dashboardRepository: DashboardRepository(
+                      remoteDataRepository:
+                          locator.get<RemoteDataRepository>())),
               child: const PreOrder(),
             ),
       },

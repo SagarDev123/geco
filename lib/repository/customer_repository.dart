@@ -6,7 +6,9 @@ import '../data/model/addtocartsuccessmodel.dart';
 import '../data/remote/api_config.dart';
 
 class CustomerRepository {
-  RemoteDataRepository remoteDataRepository = RemoteDataRepository();
+  final RemoteDataRepository remoteDataRepository;
+
+  CustomerRepository({required this.remoteDataRepository});
   getCustomerList(String? token, String name) async {
     var requestBody = {
       "utoken": token,

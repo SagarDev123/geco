@@ -4,7 +4,9 @@ import 'package:geco/repository/remotedatarepository.dart';
 import '../data/remote/api_config.dart';
 
 class DashboardRepository {
-  RemoteDataRepository remoteDataRepository = RemoteDataRepository();
+  final RemoteDataRepository remoteDataRepository;
+
+  DashboardRepository({required this.remoteDataRepository});
   Future<dynamic> getBrands(utoken) async {
     var requestBody = {
       "utoken": utoken,

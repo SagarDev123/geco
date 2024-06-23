@@ -34,6 +34,7 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
   List<String> brandNameList = [];
   List<ProductTypeDatum> productTypeList = [];
   List<ProductModelData> productList = [];
+  List<String> brandIdArray = [];
 
   String searchedBrand = '';
   String productTypeId = '';
@@ -73,9 +74,9 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
               }
             });
           } else if (state is BrandNameListFetchingCompleted) {
-            setState(() {
-              brandNameList = state.brandNameList;
-            });
+            // setState(() {
+            //   brandNameList = state.brandNameList;
+            // });
           } else if (state is ProductTypeNameListFetchingCompleted) {
             setState(() {
               productTypeNameList = state.productNameList;
@@ -709,11 +710,36 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
 
   void getFilterForProduct(String brandId, String brandName_, bool isAdded) {
     brandId_ = brandId;
-    setState(() {
-      brandName = brandName_;
-    });
+    if (brandIdArray.contains(brandId_)) {
+      brandIdArray.remove(brandId_);
+    } else {
+      brandIdArray.add(brandId_);
+    }
+    if (brandNameList.contains(brandName_)) {
+      brandNameList.remove(brandName_);
+    } else {
+      brandNameList.add(brandName_);
+    }
+    brandName = '';
+    brandNameList.forEach(
+      (element) {
+        brandName = brandName + ", " + element;
+      },
+    );
+    brandName = processString(brandName);
+    setState(() {});
     getProductIdFromProductList();
     getProductList();
+  }
+
+  String processString(String input) {
+    // Check if the string is long enough and if the second character is a comma
+
+    if (input.length > 1 && input[0] == ',') {
+      // Remove the second character
+      input = input.substring(1);
+    }
+    return input;
   }
 
   getProductIdFromProductList() {
@@ -729,7 +755,7 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
   getProductList() {
     context
         .read<CreateNewOrderBloc>()
-        .add(ProductListFetching(productTypeId, brandId_));
+        .add(ProductListFetching(productTypeId, brandIdArray));
   }
 
   void getBrandList() {

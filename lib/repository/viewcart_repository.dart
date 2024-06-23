@@ -6,7 +6,9 @@ import '../data/model/customer.dart';
 import '../data/remote/api_config.dart';
 
 class ViewCartRepository {
-  RemoteDataRepository remoteDataRepository = RemoteDataRepository();
+  final RemoteDataRepository remoteDataRepository;
+
+  ViewCartRepository({required this.remoteDataRepository});
   Future<dynamic> getItemFromCart(String? token) async {
     var requestBody = {
       "utoken": token,

@@ -5,7 +5,7 @@ class Constants {
   static const String email = 'Email';
   static const String password = 'Password';
   static const String loginNow = 'Login Now';
-  static const String previousOrder = 'Previous Order';
+  static const String previousOrder = 'Apply Now';
   static const String orderNow = 'Order Now';
   static const String createNewOrder = 'Create New Order';
   static const String loginSuccessMessage = 'User login successfully';
