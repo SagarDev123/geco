@@ -37,7 +37,7 @@ class Constants {
 
   static const String cartItems = 'Cart Items';
 
-  static const String reOrder = 'Reorder Now';
+  static const String reOrder = 'Add To Cart';
 
   static const String customers = 'Customers';
 }

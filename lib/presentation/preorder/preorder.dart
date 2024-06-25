@@ -108,7 +108,7 @@ class _PreOrderState extends State<PreOrder> {
                 fontSize: 16.0);
             Navigator.pushNamedAndRemoveUntil(
               context,
-              "/dashboard",
+              "/viewcart",
               (Route<dynamic> route) => false,
             );
           }
