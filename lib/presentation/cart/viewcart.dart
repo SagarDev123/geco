@@ -76,7 +76,7 @@ class _ViewCartState extends State<ViewCart> {
                 fontSize: 16.0);
             Navigator.pushNamedAndRemoveUntil(
               context,
-              "/preorder",
+              "/dashboard",
               (Route<dynamic> route) => false,
             );
           } else if (state is CustomerListFetched) {
