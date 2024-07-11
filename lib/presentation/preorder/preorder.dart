@@ -260,7 +260,7 @@ class _PreOrderState extends State<PreOrder> {
           child: Text(
             Constants.dashBoard,
             style: TextStyle(
-                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontSize: SizeUtils.getDynamicFontSize(context, 2.5),
                 fontWeight: FontWeight.w500,
                 color: const Color(0XFF79A544)),
           ),
@@ -270,7 +270,7 @@ class _PreOrderState extends State<PreOrder> {
           child: Text(
             Constants.preorder,
             style: TextStyle(
-                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontSize: SizeUtils.getDynamicFontSize(context, 2.5),
                 fontWeight: FontWeight.w500,
                 color: Colors.white),
           ),

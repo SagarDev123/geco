@@ -128,7 +128,7 @@ class _ViewCartChildState extends State<ViewCartChild> {
                 ),
               ),
             ),
-            Text('Price: Rs ${widget.cartList.price}',
+            Text('Price: £ ${widget.cartList.price}',
                 style:
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             // Price and Quantity Controls

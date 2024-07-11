@@ -430,7 +430,7 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
           child: Text(
             Constants.dashBoard,
             style: TextStyle(
-                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontSize: SizeUtils.getDynamicFontSize(context, 2.5),
                 fontWeight: FontWeight.w500,
                 color: const Color(0XFF79A544)),
           ),
@@ -446,7 +446,7 @@ class _CreateNewOrderState extends State<CreateNewOrder> {
           child: Text(
             Constants.createNewOrder,
             style: TextStyle(
-                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontSize: SizeUtils.getDynamicFontSize(context, 2.5),
                 fontWeight: FontWeight.w500,
                 color: Colors.white),
           ),

@@ -62,7 +62,7 @@ class _PreOrderCartItemState extends State<PreOrderCartItem> {
                     SizedBox(
                       height: SizeUtils.getScreenHeight(context, 2),
                     ),
-                    Text('Price: Rs ${widget.preOrderList.price}',
+                    Text('Price: £ ${widget.preOrderList.price}',
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
                   ],

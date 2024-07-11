@@ -455,7 +455,7 @@ class _ViewCartState extends State<ViewCart> {
         Align(
           alignment: Alignment.centerRight,
           child: Text(
-            'Rs $total',
+            '£ $total',
             style: TextStyle(
                 fontSize: SizeUtils.getDynamicFontSize(context, 2.4),
                 fontWeight: FontWeight.w600),
@@ -464,7 +464,7 @@ class _ViewCartState extends State<ViewCart> {
         Align(
           alignment: Alignment.centerRight,
           child: Text(
-            'Rs $taxable',
+            '£ $taxable',
             style: TextStyle(
                 fontSize: SizeUtils.getDynamicFontSize(context, 2.4),
                 fontWeight: FontWeight.w600),
@@ -473,7 +473,7 @@ class _ViewCartState extends State<ViewCart> {
         Align(
           alignment: Alignment.centerRight,
           child: Text(
-            'Rs $gstNumber',
+            '£ $gstNumber',
             style: TextStyle(
                 fontSize: SizeUtils.getDynamicFontSize(context, 2.4),
                 fontWeight: FontWeight.w600),
@@ -502,7 +502,7 @@ class _ViewCartState extends State<ViewCart> {
           Align(
             alignment: Alignment.centerRight,
             child: Text(
-              'Rs $totalToPay',
+              '£ $totalToPay',
               style: TextStyle(
                   fontSize: SizeUtils.getDynamicFontSize(context, 2.4),
                   fontWeight: FontWeight.w600),
@@ -527,7 +527,7 @@ class _ViewCartState extends State<ViewCart> {
           child: Text(
             Constants.dashBoard,
             style: TextStyle(
-                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontSize: SizeUtils.getDynamicFontSize(context, 2.5),
                 fontWeight: FontWeight.w500,
                 color: const Color(0XFF79A544)),
           ),
@@ -543,7 +543,7 @@ class _ViewCartState extends State<ViewCart> {
           child: Text(
             Constants.createneworder,
             style: TextStyle(
-                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontSize: SizeUtils.getDynamicFontSize(context, 2.5),
                 fontWeight: FontWeight.w500,
                 color: const Color(0XFF588230)),
           ),
@@ -553,7 +553,7 @@ class _ViewCartState extends State<ViewCart> {
           child: Text(
             Constants.viewCart,
             style: TextStyle(
-                fontSize: SizeUtils.getDynamicFontSize(context, 2),
+                fontSize: SizeUtils.getDynamicFontSize(context, 2.5),
                 fontWeight: FontWeight.w500,
                 color: Colors.white),
           ),
